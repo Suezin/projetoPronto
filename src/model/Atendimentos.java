@@ -4,32 +4,18 @@ public class Atendimentos {
     private int fkcliente;
     private int fkanimal;
     private int fkatendimento;
-    private int fkproduto;
-    private int fkservico;
+    
 
     public int getFkatendimento() {
         return fkatendimento;
     }
 
-    public int getFkproduto() {
-        return fkproduto;
-    }
-
-    public int getFkservico() {
-        return fkservico;
-    }
-
+    
     public void setFkatendimento(int fkatendimento) {
         this.fkatendimento = fkatendimento;
     }
 
-    public void setFkproduto(int fkproduto) {
-        this.fkproduto = fkproduto;
-    }
-
-    public void setFkservico(int fkservico) {
-        this.fkservico = fkservico;
-    }
+    
 
     public void setPkatendimento(int pkatendimento) {
         this.pkatendimento = pkatendimento;
@@ -55,13 +41,11 @@ public class Atendimentos {
         return fkanimal;
     }
 
-    public Atendimentos(int pkatendimento, int fkcliente, int fkanimal, int fkatendimento, int fkproduto, int fkservico) {
+    public Atendimentos(int pkatendimento, int fkcliente, int fkanimal, int fkatendimento) {
         this.pkatendimento = pkatendimento;
         this.fkcliente = fkcliente;
         this.fkanimal = fkanimal;
         this.fkatendimento = fkatendimento;
-        this.fkproduto = fkproduto;
-        this.fkservico = fkservico;
     }
 
 

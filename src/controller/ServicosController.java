@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Servicos;
 import controller.GerenciadorConexao;
+import model.Clientes;
 
 public class ServicosController {
     public List<Servicos> consultarServios() {
@@ -104,5 +105,38 @@ public class ServicosController {
             gerenciador.fecharConexao();
         }
         return false;
+    }
+     
+     public List<Servicos> buscarPorPk(int pkServico) {
+        String sql = "SELECT * FROM servicos " + "WHERE pkservico= ?";
+
+        GerenciadorConexao gerenciador = new GerenciadorConexao();
+        PreparedStatement comando = null;
+        ResultSet resultado = null;
+
+        Servicos serv = new Servicos();
+        List<Servicos> consultServico = new ArrayList<>();
+        try {
+            comando = gerenciador.prepararConexao(sql);
+            comando.setInt(1, pkServico);
+            resultado = comando.executeQuery();
+            while(resultado.next()) {
+                Servicos servico = new Servicos();
+
+                servico.setPkServico(resultado.getInt("pkservico"));
+                servico.setDescricao(resultado.getString("nomeservico"));
+                servico.setPreco(resultado.getString("preco"));
+                servico.setTempo(resultado.getString("tempo"));
+                consultServico.add(serv); 
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(UsuarioController.class
+                    .getName()).log(
+                            Level.SEVERE, null, e);
+        } finally {
+            gerenciador.fecharConexao();
+        }
+        return consultServico;
     }
 }

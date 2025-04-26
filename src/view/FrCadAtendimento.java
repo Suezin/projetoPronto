@@ -7,9 +7,14 @@ package view;
 
 import controller.AtendimentosController;
 import controller.FuncionariosController;
+import controller.ServicosController;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.AtendimentoProd;
+import model.AtendimentoServ;
 import model.Atendimentos;
-import model.Funcionario;
+import model.Servicos;
 
 /**
  *
@@ -17,12 +22,21 @@ import model.Funcionario;
  */
 public class FrCadAtendimento extends javax.swing.JDialog {
 
+    private int idCliente;
+    private int idAnimal;
+    private int idServico;
+    private int idProduto;
+    private String precoServ;
+    private String precoProd;
+    private String tempo;
+
     /**
      * Creates new form FrCadAtendimento
      */
     public FrCadAtendimento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
     }
 
     /**
@@ -50,6 +64,12 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         btnBuscarProd = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblServ = new javax.swing.JTable();
+        btnAddProd = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblProd = new javax.swing.JTable();
+        btnAddServ = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -60,6 +80,8 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Cliente");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 64, -1, -1));
+
+        txtNomeCliente.setEditable(false);
         jPanel1.add(txtNomeCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 103, 310, 37));
 
         btnBuscarCliente.setFont(new java.awt.Font("Courier New", 2, 14)); // NOI18N
@@ -81,6 +103,7 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         jLabel3.setText("Animal");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
 
+        txtAnimal.setEditable(false);
         txtAnimal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtAnimalActionPerformed(evt);
@@ -112,6 +135,7 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         jLabel5.setText("Produtos");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, -1, -1));
 
+        txtServico.setEditable(false);
         txtServico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtServicoActionPerformed(evt);
@@ -119,6 +143,7 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         });
         jPanel1.add(txtServico, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 302, 39));
 
+        txtProdutos.setEditable(false);
         txtProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtProdutosActionPerformed(evt);
@@ -170,25 +195,112 @@ public class FrCadAtendimento extends javax.swing.JDialog {
                 btnSalvarMouseClicked(evt);
             }
         });
-        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarActionPerformed(evt);
+        jPanel1.add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 570, 80, 40));
+
+        tblServ.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Descrição", "Preço", "Tempo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jPanel1.add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 570, 80, 40));
+        jScrollPane1.setViewportView(tblServ);
+        if (tblServ.getColumnModel().getColumnCount() > 0) {
+            tblServ.getColumnModel().getColumn(0).setResizable(false);
+            tblServ.getColumnModel().getColumn(1).setResizable(false);
+            tblServ.getColumnModel().getColumn(2).setResizable(false);
+            tblServ.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 90, 430, 160));
+
+        btnAddProd.setFont(new java.awt.Font("Courier New", 2, 14)); // NOI18N
+        btnAddProd.setText("Adicionar");
+        btnAddProd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddProdMouseClicked(evt);
+            }
+        });
+        btnAddProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddProdActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAddProd, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 480, -1, 40));
+
+        tblProd.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Descriçao", "Preço"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblProd);
+        if (tblProd.getColumnModel().getColumnCount() > 0) {
+            tblProd.getColumnModel().getColumn(0).setResizable(false);
+            tblProd.getColumnModel().getColumn(1).setResizable(false);
+            tblProd.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, 430, 160));
+
+        btnAddServ.setFont(new java.awt.Font("Courier New", 2, 14)); // NOI18N
+        btnAddServ.setText("Adicionar");
+        btnAddServ.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddServMouseClicked(evt);
+            }
+        });
+        btnAddServ.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddServActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAddServ, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 360, -1, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1042, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -200,9 +312,10 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         telaConsultar.setVisible(true);
 
         //Quando fechar a tela de consultar vai voltar aqui e testar se selecionou ou não
-        if(!telaConsultar.getNome().equals("")){
+        if (!telaConsultar.getNome().equals("")) {
             txtNomeCliente.setText(telaConsultar.getNome());
-        }else{
+            idCliente = telaConsultar.getId();
+        } else {
             JOptionPane.showMessageDialog(this, "Não foi selecionado um cliente");
         }
     }//GEN-LAST:event_btnBuscarClienteMouseClicked
@@ -231,21 +344,19 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarProdActionPerformed
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
     private void btnBuscarAnimalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarAnimalMouseClicked
         frConsultarAnimal telaConsultar = new frConsultarAnimal(null, rootPaneCheckingEnabled);
         telaConsultar.setVisible(true);
 
         //Quando fechar a tela de consultar vai voltar aqui e testar se selecionou ou não
-        if(!telaConsultar.getNome().equals("")){
+        if (!telaConsultar.getNome().equals("")) {
             txtAnimal.setText(telaConsultar.getNome());
-        }else{
+            idAnimal = telaConsultar.getId();
+
+        } else {
             JOptionPane.showMessageDialog(this, "Não foi selecionado um Animal !");
         }
-        
+
     }//GEN-LAST:event_btnBuscarAnimalMouseClicked
 
     private void btnBuscarServMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarServMouseClicked
@@ -253,12 +364,15 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         telaConsultar.setVisible(true);
 
         //Quando fechar a tela de consultar vai voltar aqui e testar se selecionou ou não
-        if(!telaConsultar.getDesc().equals("")){
+        if (!telaConsultar.getDesc().equals("")) {
             txtServico.setText(telaConsultar.getDesc());
-        }else{
+            idServico = telaConsultar.getId();
+            precoServ = telaConsultar.getPreco();
+            tempo = telaConsultar.getTempo();
+        } else {
             JOptionPane.showMessageDialog(this, "Não foi selecionado um Serviço !");
         }
-        
+
     }//GEN-LAST:event_btnBuscarServMouseClicked
 
     private void btnBuscarProdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarProdMouseClicked
@@ -267,60 +381,95 @@ public class FrCadAtendimento extends javax.swing.JDialog {
         telaConsultar.setVisible(true);
 
         //Quando fechar a tela de consultar vai voltar aqui e testar se selecionou ou não
-        if(!telaConsultar.getDesc().equals("")){
+        if (!telaConsultar.getDesc().equals("")) {
             txtProdutos.setText(telaConsultar.getDesc());
-        }else{
+            idProduto = telaConsultar.getId();
+            precoProd = telaConsultar.getPreco();
+        } else {
             JOptionPane.showMessageDialog(this, "Não foi selecionado um Produto !");
         }
-        
+
     }//GEN-LAST:event_btnBuscarProdMouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-this.dispose();        // TODO add your handling code here:
+        this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void btnSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalvarMouseClicked
-gravar();
-gravarAtendProd();
-gravarAtendServ();
+        gravar();
+
     }//GEN-LAST:event_btnSalvarMouseClicked
- public void gravar() {
-        FrConsultCliente telaConsultarCliente = new FrConsultCliente(null, rootPaneCheckingEnabled);
-        frConsultarAnimal telaConsultarAnimal = new frConsultarAnimal(null, rootPaneCheckingEnabled);
-        Atendimentos atend = new Atendimentos();
-        atend.setFkcliente(telaConsultarCliente.getId());
-        atend.setFkanimal(telaConsultarAnimal.getId());
 
-         AtendimentosController controller = new AtendimentosController();
+    private void btnAddProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddProdActionPerformed
+
+    private void btnAddServActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddServActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddServActionPerformed
+
+    private void btnAddServMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddServMouseClicked
+        DefaultTableModel modelotabela = (DefaultTableModel) tblServ.getModel();
+
+        Object[] linha = {
+            idServico,
+            txtServico.getText(),
+            precoServ,
+            tempo
+        };
+        modelotabela.addRow(linha);
+        txtServico.setText("");
+
+    }//GEN-LAST:event_btnAddServMouseClicked
+
+    private void btnAddProdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddProdMouseClicked
+        DefaultTableModel modelotabela = (DefaultTableModel) tblProd.getModel();
+
+        Object[] linha = {
+            idProduto,
+            txtProdutos.getText(),
+            precoProd
+        };
+        modelotabela.addRow(linha);
+        txtProdutos.setText("");
+    }//GEN-LAST:event_btnAddProdMouseClicked
+    public void gravar() {
+        Atendimentos atend = new Atendimentos();
+        atend.setFkcliente(idCliente);
+        atend.setFkanimal(idAnimal);
+
+        AtendimentosController controller = new AtendimentosController();
         controller.inserirAtendimento(atend);
-
+        int pkAtendimento = controller.consultarUltimo();
+        gravarAtendProd(pkAtendimento);
+        gravarAtendServ(pkAtendimento);
     }
- 
- public void gravarAtendProd() {
-        FrConsultProduto telaConsultarProd = new FrConsultProduto(null, rootPaneCheckingEnabled);
-         AtendimentosController controller = new AtendimentosController();
-        Atendimentos atend = new Atendimentos();
-        atend.setFkproduto(telaConsultarProd.getId());
-        atend.setFkatendimento(controller.consultar());
 
+    public void gravarAtendProd(int pkAtendimento) {
         
-        controller.inserirAtendimento(atend);
-
-    }
- 
- public void gravarAtendServ() {
-        FrConsultServico telaConsultarServ = new FrConsultServico(null, rootPaneCheckingEnabled);
-         AtendimentosController controller = new AtendimentosController();
-        Atendimentos atend = new Atendimentos();
-        atend.setFkservico(telaConsultarServ.getId());
-        atend.setFkatendimento(controller.consultar());
-
-        
-        controller.inserirAtendimento(atend);
-
+        for (int i = 0; i < tblProd.getRowCount(); i++) {
+            AtendimentoProd prod = new AtendimentoProd();
+            AtendimentosController controller = new AtendimentosController();
+            prod.setFkAtendimento(pkAtendimento);
+            int textoId = Integer.parseInt(tblProd.getValueAt(i, 0).toString());
+            prod.setFkProd(textoId);
+            controller.inserirAtendimentoProd(prod);
+        }
     }
 
-    
+    public void gravarAtendServ(int pkAtendimento) {
+        for (int i = 0; i < tblServ.getRowCount(); i++) {
+            AtendimentoServ serv = new AtendimentoServ();
+            AtendimentosController c = new AtendimentosController();
+            
+            serv.setFkAtendimento(pkAtendimento);
+            
+            int textoId =  Integer.parseInt(tblServ.getValueAt(i, 0).toString());
+            serv.setFkServico(textoId);
+            c.inserirAtendimentoServicos(serv);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -364,6 +513,8 @@ gravarAtendServ();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddProd;
+    private javax.swing.JButton btnAddServ;
     private javax.swing.JButton btnBuscarAnimal;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarProd;
@@ -376,6 +527,10 @@ gravarAtendServ();
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblProd;
+    private javax.swing.JTable tblServ;
     private javax.swing.JTextField txtAnimal;
     private javax.swing.JTextField txtNomeCliente;
     private javax.swing.JTextField txtProdutos;

@@ -23,6 +23,10 @@ private String preco;
 private String tempo ;
 private int id ;
 
+    public int getId() {
+        return id;
+    }
+
 
     /**
      * Creates new form NewJDialog
@@ -70,20 +74,20 @@ private int id ;
 
         tblServicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Descrição", "Preço", "Tempo"
+                "ID", "Descrição", "Preço", "Tempo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -95,6 +99,12 @@ private int id ;
             }
         });
         jScrollPane1.setViewportView(tblServicos);
+        if (tblServicos.getColumnModel().getColumnCount() > 0) {
+            tblServicos.getColumnModel().getColumn(0).setResizable(false);
+            tblServicos.getColumnModel().getColumn(1).setResizable(false);
+            tblServicos.getColumnModel().getColumn(2).setResizable(false);
+            tblServicos.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jLabel1.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
@@ -180,9 +190,9 @@ private int id ;
             //Pega a linha selecionada
             int linhaSelecionada = tblServicos.getSelectedRow();
 
-            String textoNome = tblServicos.getValueAt(linhaSelecionada, 0).toString();
+            String textoNome = tblServicos.getValueAt(linhaSelecionada, 1).toString();
             desc = textoNome;
-            int txtId = (int) tblServicos.getValueAt(linhaSelecionada, 3);
+            int txtId = (int) tblServicos.getValueAt(linhaSelecionada, 0);
             id = txtId;
             //Fecha a tela
             this.dispose();
@@ -199,10 +209,10 @@ private int id ;
         
         for(Servicos serv : listaServico) {
             Object[] linha = {
+                serv.getPkServico(),
                 serv.getDescricao(),
                 serv.getPreco(),
                 serv.getTempo(),
-                serv.getPkServico(),
             };
             
             modelotabela.addRow(linha);

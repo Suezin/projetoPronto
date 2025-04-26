@@ -8,14 +8,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.AtendimentoProd;
+import model.AtendimentoServ;
 import model.Atendimentos;
 import model.Clientes;
 
 public class AtendimentosController {
 
+    public boolean inserirAtendimento(Atendimentos atend) {
 
-public boolean inserirAtendimento(Atendimentos atend) {
-        
         String sql = "INSERT INTO atendimentos(fkcliente, fkanimal) VALUES (?,?)";
         GerenciadorConexao gerenciador = new GerenciadorConexao();
         PreparedStatement comando = null;
@@ -42,10 +43,9 @@ public boolean inserirAtendimento(Atendimentos atend) {
         return false;
     }
 
+    public boolean inserirAtendimentoProd(AtendimentoProd prod) {
 
-public boolean inserirAtendimentoProd(Atendimentos atend) {
-
-        String sql = "INSERT INTO clientes(fkatendimento, fkproduto) VALUES (?,?)";
+        String sql = "INSERT INTO atendimentoprodutos(fkatendimento, fkproduto) VALUES (?,?)";
         GerenciadorConexao gerenciador = new GerenciadorConexao();
         PreparedStatement comando = null;
 
@@ -57,8 +57,8 @@ public boolean inserirAtendimentoProd(Atendimentos atend) {
                 return false;
             }
 
-            comando.setInt(1, atend.getFkatendimento());
-            comando.setInt(2, atend.getFkproduto());
+            comando.setInt(1, prod.getFkAtendimento());
+            comando.setInt(2, prod.getFkProd());
 
             comando.executeUpdate();
             return true;
@@ -71,7 +71,7 @@ public boolean inserirAtendimentoProd(Atendimentos atend) {
         return false;
     }
 
-public boolean inserirAtendimentoServicos(Atendimentos atend) {
+    public boolean inserirAtendimentoServicos(AtendimentoServ serv) {
         String sql = "INSERT INTO atendimentoservicos(fkatendimento, fkservico) VALUES (?,?)";
         GerenciadorConexao gerenciador = new GerenciadorConexao();
         PreparedStatement comando = null;
@@ -84,8 +84,8 @@ public boolean inserirAtendimentoServicos(Atendimentos atend) {
                 return false;
             }
 
-            comando.setInt(1, atend.getFkatendimento());
-            comando.setInt(2, atend.getFkservico());
+            comando.setInt(1, serv.getFkAtendimento());
+            comando.setInt(2, serv.getFkServico());
 
             comando.executeUpdate();
             return true;
@@ -98,9 +98,9 @@ public boolean inserirAtendimentoServicos(Atendimentos atend) {
         return false;
     }
 
-public int consultar() {
-        
-        String sql = "SELECT * FROM atendimentos ORDER BY pkantendimento DESC";
+    public int consultarUltimo() {
+
+        String sql = "SELECT * FROM atendimentos ORDER BY pkatendimento DESC";
         GerenciadorConexao gerenciador = new GerenciadorConexao();
 
         int codigo = 0;
@@ -111,7 +111,7 @@ public int consultar() {
 
             resultado = comando.executeQuery();
             if (resultado.next()) {
-               codigo = resultado.getInt("pkatendimento");
+                codigo = resultado.getInt("pkatendimento");
             }
         } catch (SQLException e) {
             Logger.getLogger(ClienteController.class
@@ -121,6 +121,37 @@ public int consultar() {
         } finally {
             gerenciador.fecharConexao(comando, resultado);
         }
-return codigo ;
+        return codigo;
+    }
+   public List<Atendimentos> consultarAtendimentos() {
+        String sql = "SELECT * FROM atendimentos";
+        GerenciadorConexao gerenciador = new GerenciadorConexao();
+
+        PreparedStatement comando = null;
+        ResultSet resultado = null;
+        List<Atendimentos> listaAtendimentos = new ArrayList<>();
+        try {
+            comando = gerenciador.prepararConexao(sql);
+            
+            resultado = comando.executeQuery();
+            while (resultado.next()) {
+                Atendimentos atend = new Atendimentos();
+                
+
+                atend.setPkatendimento(resultado.getInt("pkatendimento"));
+                atend.setFkcliente(resultado.getInt("fkcliente"));
+                atend.setFkanimal(resultado.getInt("fkanimal"));
+                listaAtendimentos.add(atend);
+
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ClienteController.class
+                    .getName()).log(
+                            Level.SEVERE, null, e);
+
+        } finally {
+            gerenciador.fecharConexao(comando, resultado);
+        }
+        return listaAtendimentos;
     }
 }

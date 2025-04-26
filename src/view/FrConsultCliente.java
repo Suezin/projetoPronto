@@ -73,20 +73,20 @@ public class FrConsultCliente extends javax.swing.JDialog {
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Nome ", "Telefone", "Data Nascimento"
+                "ID", "Nome ", "Telefone", "Data Nascimento"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -102,6 +102,7 @@ public class FrConsultCliente extends javax.swing.JDialog {
             tblClientes.getColumnModel().getColumn(0).setResizable(false);
             tblClientes.getColumnModel().getColumn(1).setResizable(false);
             tblClientes.getColumnModel().getColumn(2).setResizable(false);
+            tblClientes.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jLabel1.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
@@ -126,6 +127,11 @@ public class FrConsultCliente extends javax.swing.JDialog {
         btnSelecionar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnSelecionarMouseClicked(evt);
+            }
+        });
+        btnSelecionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelecionarActionPerformed(evt);
             }
         });
 
@@ -185,9 +191,9 @@ public class FrConsultCliente extends javax.swing.JDialog {
       //Pega a linha selecionada
       int linhaSelecionada = tblClientes.getSelectedRow();
          
-      String textoNome = tblClientes.getValueAt(linhaSelecionada, 0).toString();
+      String textoNome = tblClientes.getValueAt(linhaSelecionada, 1).toString();
       nome = textoNome;
-      int txtId = (int) tblClientes.getValueAt(linhaSelecionada, 3);
+      int txtId = (int) tblClientes.getValueAt(linhaSelecionada, 0);
             id = txtId;
            
       //Fecha a tela
@@ -200,6 +206,10 @@ public class FrConsultCliente extends javax.swing.JDialog {
         
     }//GEN-LAST:event_btnCancelarMouseClicked
 
+    private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSelecionarActionPerformed
+
      public void pesquisar(){
         DefaultTableModel modelotabela = (DefaultTableModel) tblClientes.getModel();
         
@@ -209,10 +219,10 @@ public class FrConsultCliente extends javax.swing.JDialog {
         
         for(Clientes c : listaClientes) {
             Object[] linha = {
+                c.getPkCliente(),
                 c.getNome(),
                 c.getTelefone(),
                 c.getDataNasc(),
-                c.getPkCliente(),
             };
             
             modelotabela.addRow(linha);

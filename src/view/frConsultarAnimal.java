@@ -72,20 +72,20 @@ public class frConsultarAnimal extends javax.swing.JDialog {
 
         tblAnimais.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Nome ", "Tipo", "Raça"
+                "Id", "Nome ", "Tipo", "Raça"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -101,6 +101,7 @@ public class frConsultarAnimal extends javax.swing.JDialog {
             tblAnimais.getColumnModel().getColumn(0).setResizable(false);
             tblAnimais.getColumnModel().getColumn(1).setResizable(false);
             tblAnimais.getColumnModel().getColumn(2).setResizable(false);
+            tblAnimais.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jLabel1.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
@@ -188,9 +189,9 @@ public class frConsultarAnimal extends javax.swing.JDialog {
             //Pega a linha selecionada
             int linhaSelecionada = tblAnimais.getSelectedRow();
 
-            String textoNome = tblAnimais.getValueAt(linhaSelecionada, 0).toString();
+            String textoNome = tblAnimais.getValueAt(linhaSelecionada, 1).toString();
             nome = textoNome;
-            int txtId = (int) tblAnimais.getValueAt(linhaSelecionada, 3);
+            int txtId = (int) tblAnimais.getValueAt(linhaSelecionada, 0);
             id = txtId;
             //Fecha a tela
             this.dispose();
@@ -207,10 +208,10 @@ public class frConsultarAnimal extends javax.swing.JDialog {
         
         for(Animal animal : listaAnimal) {
             Object[] linha = {
+                animal.getId(),
                 animal.getNome(),
                 animal.getTipo(),
                 animal.getRaca(),
-                animal.getId(),
             };
             
             modelotabela.addRow(linha);

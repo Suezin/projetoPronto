@@ -37,7 +37,7 @@ public class FrMenu extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        mnAddAtendimento = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
@@ -124,8 +124,13 @@ public class FrMenu extends javax.swing.JFrame {
 
         jMenu2.setText("Atendimento");
 
-        jMenuItem6.setText("Adicionar");
-        jMenu2.add(jMenuItem6);
+        mnAddAtendimento.setText("Adicionar");
+        mnAddAtendimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnAddAtendimentoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnAddAtendimento);
 
         jMenuItem7.setText("Pesquisar ");
         jMenu2.add(jMenuItem7);
@@ -177,6 +182,12 @@ public class FrMenu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_meCadServicoMouseClicked
 
+    private void mnAddAtendimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnAddAtendimentoActionPerformed
+        // TODO add your handling code here:
+        FrCadAtendimento telaAtend = new FrCadAtendimento(null, rootPaneCheckingEnabled);
+        telaAtend.setVisible(true);
+    }//GEN-LAST:event_mnAddAtendimentoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -223,11 +234,11 @@ public class FrMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuItem meCadServico;
     private javax.swing.JMenuItem meCadUsu;
+    private javax.swing.JMenuItem mnAddAtendimento;
     // End of variables declaration//GEN-END:variables
 }

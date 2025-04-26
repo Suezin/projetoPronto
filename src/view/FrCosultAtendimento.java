@@ -5,48 +5,28 @@
  */
 package view;
 
+import controller.AnimalController;
+import controller.AtendimentosController;
 import controller.ClienteController;
-import controller.ProdutosController;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import model.Atendimentos;
 import model.Clientes;
-import model.Produtos;
 
 /**
  *
  * @author aluno.saolucas
  */
-public class FrConsultProduto extends javax.swing.JDialog {
-private String desc;
-private String preco ;
-private int id;
+public class FrCosultAtendimento extends javax.swing.JDialog {
 
-    public int getId() {
-        return id;
-    }
-
-    
-   
     /**
-     * Creates new form FrConsultProduto
+     * Creates new form FrCosultAtendimento
      */
-    public FrConsultProduto(java.awt.Frame parent, boolean modal) {
+    public FrCosultAtendimento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        pesquisar();
-        desc = "" ;
-        preco = "";
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public String getPreco() {
-        return preco;
-    }
-
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,16 +38,16 @@ private int id;
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblProdutos = new javax.swing.JTable();
+        tblAtendimentos = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
-        btnSelecionar = new javax.swing.JButton();
+        btnPesquisar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 153, 0));
+        jPanel1.setBackground(new java.awt.Color(0, 255, 153));
 
-        tblProdutos.setModel(new javax.swing.table.DefaultTableModel(
+        tblAtendimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -75,14 +55,14 @@ private int id;
                 {null, null, null}
             },
             new String [] {
-                "ID", "Nome ", "Preço"
+                "Nome ", "Telefone", "Data Nascimento"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -93,16 +73,11 @@ private int id;
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblProdutos);
-        if (tblProdutos.getColumnModel().getColumnCount() > 0) {
-            tblProdutos.getColumnModel().getColumn(0).setResizable(false);
-            tblProdutos.getColumnModel().getColumn(1).setResizable(false);
-            tblProdutos.getColumnModel().getColumn(2).setResizable(false);
-        }
+        jScrollPane1.setViewportView(tblAtendimentos);
 
         jLabel1.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Selecionar Produtos");
+        jLabel1.setText("Buscar Atendimentos");
 
         btnCancelar.setFont(new java.awt.Font("Courier New", 2, 18)); // NOI18N
         btnCancelar.setText("Cancelar");
@@ -117,11 +92,16 @@ private int id;
             }
         });
 
-        btnSelecionar.setFont(new java.awt.Font("Courier New", 2, 18)); // NOI18N
-        btnSelecionar.setText("Selecionar");
-        btnSelecionar.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnPesquisar.setFont(new java.awt.Font("Courier New", 2, 18)); // NOI18N
+        btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnSelecionarMouseClicked(evt);
+                btnPesquisarMouseClicked(evt);
+            }
+        });
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
             }
         });
 
@@ -134,28 +114,27 @@ private int id;
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(193, 193, 193))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(btnCancelar)
-                        .addGap(159, 159, 159)
-                        .addComponent(btnSelecionar))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addGap(107, 107, 107)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(148, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(119, 119, 119)
+                .addComponent(btnCancelar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnPesquisar)
+                .addGap(183, 183, 183))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
-                    .addComponent(btnSelecionar))
+                    .addComponent(btnPesquisar))
                 .addGap(39, 39, 39))
         );
 
@@ -182,33 +161,28 @@ private int id;
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnSelecionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelecionarMouseClicked
-        if (tblProdutos.getSelectedRow() != -1) {
-            //Pega a linha selecionada
-            int linhaSelecionada = tblProdutos.getSelectedRow();
+    private void btnPesquisarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPesquisarMouseClicked
+      pesquisar();
+    }//GEN-LAST:event_btnPesquisarMouseClicked
 
-            String textoNome = tblProdutos.getValueAt(linhaSelecionada, 1).toString();
-            desc = textoNome;
-            int txtId = (int) tblProdutos.getValueAt(linhaSelecionada, 0);
-            id = txtId;
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPesquisarActionPerformed
 
-            //Fecha a tela
-            this.dispose();
-        }
-    }//GEN-LAST:event_btnSelecionarMouseClicked
-
-     public void pesquisar(){
-        DefaultTableModel modelotabela = (DefaultTableModel) tblProdutos.getModel();
+    public void pesquisar(){
+        DefaultTableModel modelotabela = (DefaultTableModel) tblAtendimentos.getModel();
         
         modelotabela.setNumRows(0);
-         ProdutosController controller = new ProdutosController();
-        List<Produtos> listaProdutos = controller.consultarProdutos();
+        ClienteController cont = new ClienteController();
+        AnimalController animal = new AnimalController();
+        AtendimentosController controller = new AtendimentosController();
+        List<Atendimentos> listaAtendimentos = controller.consultarAtendimentos();
         
-        for(Produtos prod : listaProdutos) {
+        for(Atendimentos a : listaAtendimentos) {
             Object[] linha = {
-                prod.getPkProduto(),
-                prod.getDescricao(),
-                prod.getPreco(),
+                a.getPkatendimento(),
+                cont.buscarPorPk(a.getFkcliente()),
+                animal.buscarPorPk(a.getFkanimal()),
             };
             
             modelotabela.addRow(linha);
@@ -231,20 +205,20 @@ private int id;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrConsultProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrCosultAtendimento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrConsultProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrCosultAtendimento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrConsultProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrCosultAtendimento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrConsultProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrCosultAtendimento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrConsultProduto dialog = new FrConsultProduto(new javax.swing.JFrame(), true);
+                FrCosultAtendimento dialog = new FrCosultAtendimento(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -258,10 +232,10 @@ private int id;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnSelecionar;
+    private javax.swing.JButton btnPesquisar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblProdutos;
+    private javax.swing.JTable tblAtendimentos;
     // End of variables declaration//GEN-END:variables
 }
